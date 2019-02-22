@@ -6,6 +6,7 @@ import Effpee.Test
 import Effpee.Many
 
 suite
+<<<<<<< HEAD
   = testGroup "Many"
   [ headOrDefaultTests
   , appendTests
@@ -35,6 +36,15 @@ suite
   , flattenTests
   , reverseTests
   ]
+=======
+  = testGroup "Effpee.Many"
+    [ testProperty "reverse . reverse == identity" propReverseReverseIsId
+    , testProperty "reverse == identity when list empty" propReverseIsIdEmpty
+    , testProperty "reverse == identity when list singleton" propReverseIsIdSingleton
+--    , testProperty "reverse != identity when list not empty and not singleton" propReverseNotId
+    , testProperty "length . reverse == length . identity" propReverseLengthIsIdLength
+    ]
+>>>>>>> 2fc3033... Try to implement Many.hs.  getting a weird type error
 
 genMany :: GenT Identity (Many Char)
 genMany = fromList <$> list (linear 0 100) alpha
