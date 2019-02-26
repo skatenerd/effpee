@@ -289,6 +289,10 @@ reverse (x :. xs) = reverse xs `append` (x :. Empty)
 reverse' :: Many a -> Many a
 reverse' items = foldR go Empty items
   where go headItem reversedSoFar = headItem :. reversedSoFar
+--reverse items = go items Empty
+--  where go (head :. tail) reversedSoFar = go tail (head :. reversedSoFar)
+--        go Empty reversedSoFar = reversedSoFar
+--
 --reverse Empty = Empty
 --reverse (head :. tail) = appendOne head (reverse tail)
 --  where appendOne item (head :. tail) = head :. (appendOne item tail)
