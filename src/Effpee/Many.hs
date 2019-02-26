@@ -78,7 +78,7 @@ drop n (_ :. tail) = drop (n - 1) tail
 -- >>> dropWhile isOdd (13 :. 21 :. 32 :. 41 :. Empty)
 -- (32 :. 41 :. Empty)
 dropWhile :: (a -> Bool) -> Many a -> Many a
-dropWhile f Empty = Empty
+dropWhile _ Empty = Empty
 dropWhile f (head :. tail) = if (f head)
                                then dropWhile f tail
                                else (head :. tail)
@@ -94,7 +94,7 @@ take
   -> Many a
 =======
 take _ Empty = Empty
-take 0 items = Empty
+take 0 _ = Empty
 take n (head :. rest) = head :. (take (n - 1) rest)
 
 -- | Take the first elements satisfying the given predicate function @(a -> Bool)@.
@@ -198,7 +198,7 @@ length
   :: Many a
   -> Integer
 length items = foldR count 0 items
-  where count headItem counter = counter + 1
+  where count _ counter = counter + 1
 
 -- | OR-ing a @Many Boolean@ together.
 -- >>> or (Nah :. Yeah :. Empty)
