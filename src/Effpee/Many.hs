@@ -68,7 +68,9 @@ append = todo "Effpee.Many#append"
 -- (2 :. 3 :. 4 :. Empty)
 -- Would this work with /infinite/ lists?
 drop :: Integer -> Many a -> Many a
-drop = todo "Effpee.Many#drop"
+drop _ Empty = Empty
+drop 0 current = current
+drop n (_ :. tail) = drop (n - 1) tail
 
 -- | Drop the first elements in the given @Many a@ that do not satisfy the
 -- given predicate function @(a -> Bool)@.
@@ -76,7 +78,10 @@ drop = todo "Effpee.Many#drop"
 -- >>> dropWhile isOdd (13 :. 21 :. 32 :. 41 :. Empty)
 -- (32 :. 41 :. Empty)
 dropWhile :: (a -> Bool) -> Many a -> Many a
-dropWhile = todo "Effpee.Many#dropWhile"
+dropWhile f Empty = Empty
+dropWhile f (head :. tail) = if (f head)
+                               then dropWhile f tail
+                               else (head :. tail)
 
 -- | Take the first @Integer@ elements from the given @Many a@.
 -- >>> take 5 (1 :. 2 :. Empty)
@@ -87,7 +92,10 @@ take
   :: Integer
   -> Many a
   -> Many a
-take = todo "Effpee.Many#take"
+=======
+take _ Empty = Empty
+take 0 items = Empty
+take n (head :. rest) = head :. (take (n - 1) rest)
 
 -- | Take the first elements satisfying the given predicate function @(a -> Bool)@.
 -- >>> takeWhile isOdd (51 :. 53 :. 6 :. 55 :. Empty)
@@ -146,7 +154,7 @@ foldR
 -- foldR (:.) Empty (1 :. 2 :. 3 :. Empty)
 -- foldL (flip (:.)) Empty ...
 
-foldR _ b Empty     = b
+foldR _ b Empty = b
 foldR f b (x :. xs) = foldR f (f x b) xs
 
 -- | fold from a seed value starting from the first element in a @Many a@.
@@ -189,7 +197,8 @@ sum' = todo "Effpee.Many#sum' -- express in terms of foldR"
 length
   :: Many a
   -> Integer
-length = todo "Effpee.Many#length -- express in terms of foldR"
+length items = foldR count 0 items
+  where count headItem counter = counter + 1
 
 -- | OR-ing a @Many Boolean@ together.
 -- >>> or (Nah :. Yeah :. Empty)
@@ -278,4 +287,9 @@ reverse Empty = Empty
 reverse (x :. xs) = reverse xs `append` (x :. Empty)
 
 reverse' :: Many a -> Many a
-reverse' = todo "Effpee.Many#reverse' -- express in terms of foldL and/or foldR"
+reverse' items = foldR go Empty items
+  where go headItem reversedSoFar = headItem :. reversedSoFar
+--reverse Empty = Empty
+--reverse (head :. tail) = appendOne head (reverse tail)
+--  where appendOne item (head :. tail) = head :. (appendOne item tail)
+--        appendOne item Empty = item :. Empty
