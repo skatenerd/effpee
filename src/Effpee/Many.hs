@@ -92,7 +92,6 @@ take
   :: Integer
   -> Many a
   -> Many a
-=======
 take _ Empty = Empty
 take 0 _ = Empty
 take n (head :. rest) = head :. (take (n - 1) rest)

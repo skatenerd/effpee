@@ -132,13 +132,8 @@ takeTests
            take n xs === xs
     , testProperty "length $ take ((length xs) - 1) xs == length xs - 1" $
       property $
-<<<<<<< HEAD
         do xs <- forAll genMany
            let n = toInteger $ (length xs)
-=======
-        do xs <- forAll genManyMany
-           let n = toInteger $ (length xs) - 1
->>>>>>> Implement Many so far, and fix a buggy property
            (length (take n xs)) === n
     ]
 
