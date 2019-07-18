@@ -7,7 +7,7 @@ module Effpee.Validation where
 import Control.Applicative
 import Data.Eq             (Eq (..))
 import Data.Functor
-import Data.Monoid         (Monoid, mempty)
+import Data.Monoid         (Monoid, mempty, mappend)
 import Data.Semigroup      (Semigroup, (<>))
 import Effpee
 import GHC.Show
@@ -40,14 +40,19 @@ orVList = todo "Effpee.Validation#orVList"
 -- Alternative methods on our `Validation e a` values.
 instance Semigroup e => Applicative (Validation e) where
   pure :: a -> Validation e a
-  pure = todo "Effpee.Validation#pure"
+  pure something = Valid something
 
   (<*>) :: Validation e (a -> b) -> Validation e a -> Validation e b
-  (<*>) = todo "(Semigroup a => Applicative (Validation a))#(<*>)"
+  (<*>) (Error e) _ = Error e
+  (<*>) (Valid f) (Valid thing) = Valid (f thing)
+  (<*>) (Valid f) (Error e) = Error e
 
 instance Monoid e => Alternative (Validation e) where
   empty :: Validation e a
-  empty = todo "(Monoid e => Alternative (Validation e))#empty"
+  empty = Error mempty
 
   (<|>) :: Validation e a -> Validation e a -> Validation e a
-  (<|>) = todo "(Monoid e => Alternative (Validation e))#(<|>)"
+  (<|>) (Error e1) (Error e2) = Error (mappend e1 e2)
+  (<|>) (Valid v1) (Valid v2) = Valid v1
+  (<|>) (Error e1) _ = Error e1
+  (<|>) _ (Error e1) = Error e1
