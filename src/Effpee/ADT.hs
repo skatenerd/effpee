@@ -52,7 +52,7 @@ data Void
 data Unit = Unit
 
 -- A type with two values: one to signify "true", the other to signify "false"
-data Boolean = Yeah | Nah deriving (Eq, ToText, Generic)
+data Boolean = Yeah | Nah deriving (Eq, ToText, Generic, Show)
 
 {-
  ____________
@@ -84,7 +84,7 @@ data Portrait
   | Jackson
   | Grant
   | Franklin
-  deriving (Enum, ToText, Eq, Generic)
+  deriving (Enum, ToText, Eq, Generic, Show)
 
 -- Coproduct type representing each type of US bill
 -- * one dollar

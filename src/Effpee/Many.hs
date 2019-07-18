@@ -23,7 +23,8 @@ headOrDefault
   :: a
   -> Many a
   -> a
-headOrDefault = todo "Effpee.Many#headOrDefault"
+headOrDefault backup Empty= backup
+headOrDefault _ (h :. r) = h
 
 -- | Converts a @Many a@ to a @[a]@.
 --   Should retain order of elements and length property.
@@ -36,14 +37,16 @@ headOrDefault = todo "Effpee.Many#headOrDefault"
 toList
   :: Many a
   -> [a]
-toList = todo "Effpee.Many#toList"
+toList Empty = []
+toList (h :. t) = h : (toList t)
 
 -- | Converts a @[a]@ to a @Many a@.
 --   Should retain order of elements and length property.
 fromList
   :: [a]
   -> Many a
-fromList = todo "Effpee.Many#fromList"
+fromList [] = Empty
+fromList (h : t) = h :. (fromList t)
 
 -- | Append two @Many a@ together in the order they are passed to the function.
 -- >>> append (1 :. (2 :. (3 :. Empty))) Empty
@@ -56,7 +59,8 @@ append
   :: Many a
   -> Many a
   -> Many a
-append = todo "Effpee.Many#append"
+append Empty bigtail = bigtail
+append (h :. r) tail = h :. (append r tail)
 
 
 -- | Drop the first @Integer@ elements in the given @Many a@.
